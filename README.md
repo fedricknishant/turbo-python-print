@@ -1,6 +1,6 @@
 # turbo-print README
 
-This is VSCode Extension inspired by `https://github.com/Chakroun-Anas/turbo-console-log`
+This is a VSCode Extension inspired by `https://github.com/Chakroun-Anas/turbo-console-log`
 
 ## Features
 
