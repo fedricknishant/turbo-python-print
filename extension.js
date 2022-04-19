@@ -1,0 +1,111 @@
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
+const vscode = require('vscode');
+
+// this method is called when your extension is activated
+// your extension is activated the very first time the command is executed
+
+/**
+ * @param {vscode.ExtensionContext} context
+ */
+function activate(context) {
+
+	// Use the console to output diagnostic information (console.log) and errors (console.error)
+	// This line of code will only be executed once when your extension is activated
+	console.log('Congratulations, your extension "turbo-print" is now active!');
+
+
+
+
+	// The command has been defined in the package.json file
+	// Now provide the implementation of the command with  registerCommand
+	// The commandId parameter must match the command field in package.json
+	let disposable = vscode.commands.registerCommand('turbo-print.pythonPrint', async () => {
+		// The code you place here will be executed every time your command is executed
+
+
+		// Get the active text editor
+		const editor = vscode.window.activeTextEditor;
+		// valid variable regex
+		const validVariableRegex = /^[a-zA-Z_][a-zA-Z0-9_.\[\]()'"]*$/;
+
+		try {
+			if (!editor) {
+				throw 'No active editor';
+			} else {
+				const document = editor.document;
+				const selection = editor.selection;
+				const text = document.getText(selection);
+				if (!text) {
+					throw 'No text selected';
+				} else {
+
+					// get the current file name from the editor
+					const fileNameArray = document.fileName.split('\\');
+
+					// get last two elements of the file name
+					const fileName = fileNameArray[fileNameArray.length - 2] + '\\' + fileNameArray[fileNameArray.length - 1];
+					// check if python file
+					const fileExt = fileNameArray[fileNameArray.length - 1].split('.');
+					if (fileExt[fileExt.length - 1] !== 'py') {
+						throw 'Not a python file';
+					}
+
+					// check if text passes the validVariableRegex regex
+					if (!text.match(validVariableRegex)) {
+						throw 'Invalid variable name';
+					}
+
+
+
+
+
+					// get the line number of the selected text
+					const lineNumber = document.lineAt(selection.start.line).lineNumber;
+					// get the character end of the selected text
+					const characterEnd = document.lineAt(selection.end.line).range.end.character;
+
+					const fullText = document.lineAt(selection.end.line).text;
+					// get the position of first character of the fullText after spaces
+					const firstCharPosition = fullText.search(/\S/);
+					// const characterStart = document.lineAt(selection.start.line).range.start.character;
+
+					// // get the character position of the selected text
+					// const characterStart = selection.start.character;
+
+
+					// validate variable name
+
+
+
+					// add spaces for formating	
+					const spaces = ' '.repeat(firstCharPosition);
+					// insert comment in the editor
+					editor.edit(editBuilder => {
+						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("File name= '${fileName}' | Line No=${lineNumber} | ",${text})`);
+					});
+				}
+
+			}
+
+
+		} catch (error) {
+			vscode.window.showErrorMessage(error);
+		}
+
+		// get the current selection
+		// const selection = editor.selection;
+		// console.log("🚀 ~ file: extension.js ~ line 29 ~ disposable ~ selection", selection)
+
+	});
+
+	context.subscriptions.push(disposable);
+}
+
+// this method is called when your extension is deactivated
+function deactivate() { }
+
+module.exports = {
+	activate,
+	deactivate
+}
