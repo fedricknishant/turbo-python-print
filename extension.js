@@ -21,7 +21,8 @@ function activate(context) {
 	// The command has been defined in the package.json file
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('turbo-print.pythonPrint', async () => {
+	let disposable;
+	disposable = vscode.commands.registerCommand('turbo-print.pythonPrint', async () => {
 		// The code you place here will be executed every time your command is executed
 
 
@@ -86,6 +87,38 @@ function activate(context) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	disposable = vscode.commands.registerCommand('turbo-print.pythonRemoveAllPrint', async () => {
+		let editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showErrorMessage("No active editor");
+		}
+		let start, end;
+		let selection = editor.selection;
+		if (selection.isEmpty) {
+			start = 0;
+			end = editor.document.lineCount - 1;
+		} else {
+			start = editor.selection.start.line;
+			end = editor.selection.end.line;
+		}
+		let deleteLines = [];
+		for (let i = start; i <= end; i++) {
+			const line = editor.document.lineAt(i);
+			const lineText = line.text.trim();
+			if (lineText.startsWith("print")) {
+				deleteLines.push(line.lineNumber);
+			}
+		}
+		for (let i = 0; i < deleteLines.length; i++) {
+			const line = editor.document.lineAt(deleteLines[i] - i);
+			await editor.edit(editBuilder => {
+				editBuilder.delete(line.rangeIncludingLineBreak);
+			});
+		}
+	})
+	context.subscriptions.push(disposable);
+
 }
 
 // this method is called when your extension is deactivated
