@@ -13,14 +13,21 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:turbo-print.pythonPrint"
+		"onCommand:turbo-python-print.pythonPrint"
 	],
 	"main": "./extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "turbo-print.pythonPrint",
-				"title": "Turbo Print - Python"
+				"command": "turbo-python-print.pythonPrint",
+				"title": "Print The line numbers and the code"
+			}
+		],
+		"keybindings": [
+			{
+				"command": "turbo-python-print.pythonPrint",
+				"key": "ctrl+alt+p",
+				"mac": "ctrl+alt+p"
 			}
 		]
 	},
