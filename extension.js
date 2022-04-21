@@ -106,7 +106,7 @@ function activate(context) {
 		for (let i = start; i <= end; i++) {
 			const line = editor.document.lineAt(i);
 			const lineText = line.text.trim();
-			if (lineText.startsWith("print")) {
+			if (lineText.startsWith("print(") || lineText.startsWith("# print(")) {
 				deleteLines.push(line.lineNumber);
 			}
 		}
