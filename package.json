@@ -1,7 +1,7 @@
 {
 	"name": "turbo-python-print",
-	"displayName": "Turbo Print",
-	"icon": "images/turbo-python-print.png",
+	"displayName": "Turbo Python Print",
+	"icon": "images/turbo-python-print-v2.png",
 	"publisher": "FedrickNishant",
 	"repository": "https://github.com/fedricknishant/turbo-print",
 	"description": "",
