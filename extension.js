@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
+const utils = require('./utils');
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -26,8 +27,6 @@ function activate(context) {
 
 		// Get the active text editor
 		const editor = vscode.window.activeTextEditor;
-		// valid variable regex
-		const validVariableRegex = /^[a-zA-Z_][a-zA-Z0-9_.\[\]()'"]*$/;
 
 		try {
 			if (!editor) {
@@ -51,15 +50,6 @@ function activate(context) {
 						throw 'Not a python file';
 					}
 
-					// check if text passes the validVariableRegex regex
-					if (!text.match(validVariableRegex)) {
-						throw 'Invalid variable name';
-					}
-
-
-
-
-
 					// get the line number of the selected text
 					const lineNumber = document.lineAt(selection.start.line).lineNumber;
 					// get the character end of the selected text
@@ -68,21 +58,17 @@ function activate(context) {
 					const fullText = document.lineAt(selection.end.line).text;
 					// get the position of first character of the fullText after spaces
 					const firstCharPosition = fullText.search(/\S/);
-					// const characterStart = document.lineAt(selection.start.line).range.start.character;
 
-					// // get the character position of the selected text
-					// const characterStart = selection.start.character;
-
-
-					// validate variable name
-
+					// get the indentation spaces count of the print statement	
+					// get the heirarchy
+					const heirarchy = utils.getHeirarchy(fullText, lineNumber, document)
 
 
 					// add spaces for formating	
 					const spaces = ' '.repeat(firstCharPosition);
 					// insert comment in the editor
 					editor.edit(editBuilder => {
-						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("File name= '${fileName}' | Line No=${lineNumber} | ",${text})`);
+						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("File: '${fileName}' | Line: ${lineNumber} | ${heirarchy} ~ ${text}",${text})`);
 					});
 				}
 
