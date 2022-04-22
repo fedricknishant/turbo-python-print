@@ -5,7 +5,7 @@
 	"publisher": "FedrickNishant",
 	"repository": "https://github.com/fedricknishant/turbo-print",
 	"description": "",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"engines": {
 		"vscode": "^1.66.0"
 	},
@@ -14,7 +14,7 @@
 	],
 	"activationEvents": [
 		"onCommand:turbo-python-print.pythonPrint",
-    	"onCommand:turbo-python-print.pythonRemoveAllPrint"
+		"onCommand:turbo-python-print.pythonRemoveAllPrint"
 	],
 	"main": "./extension.js",
 	"contributes": {
