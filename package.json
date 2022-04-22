@@ -13,7 +13,8 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:turbo-python-print.pythonPrint"
+		"onCommand:turbo-python-print.pythonPrint",
+    	"onCommand:turbo-python-print.pythonRemoveAllPrint"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -21,6 +22,10 @@
 			{
 				"command": "turbo-python-print.pythonPrint",
 				"title": "Print The line numbers and the code"
+			},
+			{
+				"command": "turbo-python-print.pythonRemoveAllPrint",
+				"title": "Turbo Print - Python - Remove All Print"
 			}
 		],
 		"keybindings": [
