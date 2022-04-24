@@ -21,11 +21,11 @@
 		"commands": [
 			{
 				"command": "turbo-python-print.pythonPrint",
-				"title": "Print The line numbers and the code"
+				"title": "Turbo Python Print - Print The line numbers and the code"
 			},
 			{
 				"command": "turbo-python-print.pythonRemoveAllPrint",
-				"title": "Turbo Print - Python - Remove All Print"
+				"title": "Turbo Python Print - Python - Remove All Print"
 			}
 		],
 		"keybindings": [
@@ -33,6 +33,11 @@
 				"command": "turbo-python-print.pythonPrint",
 				"key": "ctrl+alt+p",
 				"mac": "ctrl+alt+p"
+			},
+			{
+				"command": "turbo-python-print.pythonRemoveAllPrint",
+				"key": "ctrl+alt+0",
+				"mac": "ctrl+alt+0"
 			}
 		]
 	},

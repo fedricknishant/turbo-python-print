@@ -22,7 +22,7 @@ function activate(context) {
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
 	let disposable;
-	
+
 	disposable = vscode.commands.registerCommand('turbo-python-print.pythonPrint', async () => {
 		// The code you place here will be executed every time your command is executed
 
@@ -35,17 +35,21 @@ function activate(context) {
 				throw 'No active editor';
 			} else {
 				const document = editor.document;
-				const selection = editor.selection;
+				const selection = editor.selections[0];
 				const text = document.getText(selection);
 				if (!text) {
 					throw 'No text selected';
 				} else {
 
+					// get the os of the computer
+					const isWindows = Boolean(vscode.env.appRoot && vscode.env.appRoot[0] !== "/");
+
 					// get the current file name from the editor
-					const fileNameArray = document.fileName.split('\\');
+					let splitter = isWindows ? '\\' : '/';
+					const fileNameArray = document.fileName.split(splitter);
 
 					// get last two elements of the file name
-					const fileName = fileNameArray[fileNameArray.length - 2] + '\\' + fileNameArray[fileNameArray.length - 1];
+					const fileName = fileNameArray[fileNameArray.length - 2] + '/' + fileNameArray[fileNameArray.length - 1];
 					// check if python file
 					const fileExt = fileNameArray[fileNameArray.length - 1].split('.');
 					if (fileExt[fileExt.length - 1] !== 'py') {
@@ -53,7 +57,9 @@ function activate(context) {
 					}
 
 					// get the line number of the selected text
-					const lineNumber = document.lineAt(selection.start.line).lineNumber;
+					// const lineNumber = document.lineAt(selection.start.line).lineNumber;
+					const lineNumber = selection.active.line;
+
 					// get the character end of the selected text
 					const characterEnd = document.lineAt(selection.end.line).range.end.character;
 
@@ -70,7 +76,7 @@ function activate(context) {
 					const spaces = ' '.repeat(firstCharPosition);
 					// insert comment in the editor
 					editor.edit(editBuilder => {
-						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("File: '${fileName}' | Line: ${lineNumber} | ${heirarchy} ~ ${text}",${text})`);
+						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("🐍 File: ${fileName} | Line: ${lineNumber + 2} | ${heirarchy} ~ ${text}",${text})`);
 					});
 				}
 
@@ -80,10 +86,6 @@ function activate(context) {
 		} catch (error) {
 			vscode.window.showErrorMessage(error);
 		}
-
-		// get the current selection
-		// const selection = editor.selection;
-		// console.log("🚀 ~ file: extension.js ~ line 29 ~ disposable ~ selection", selection)
 
 	});
 
