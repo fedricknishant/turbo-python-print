@@ -109,7 +109,7 @@ function activate(context) {
 		for (let i = start; i <= end; i++) {
 			const line = editor.document.lineAt(i);
 			const lineText = line.text.trim();
-			if (lineText.startsWith("print(") || lineText.startsWith("# print(")) {
+			if (lineText.startsWith("print(\"🐍") || lineText.startsWith("# print(\"🐍")) {
 				deleteLines.push(line.lineNumber);
 			}
 		}
@@ -122,6 +122,65 @@ function activate(context) {
 	})
 	context.subscriptions.push(disposable);
 
+	disposable = vscode.commands.registerCommand('turbo-python-print.pythonCommentAllPrint', async () => {
+		let editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showErrorMessage("No active editor");
+		}
+		let start, end;
+		let selection = editor.selection;
+		if (selection.isEmpty) {
+			start = 0;
+			end = editor.document.lineCount - 1;
+		} else {
+			start = editor.selection.start.line;
+			end = editor.selection.end.line;
+		}
+		for (let i = start; i <= end; i++) {
+			const line = editor.document.lineAt(i);
+			const lineText = line.text.trim();
+			if (lineText.startsWith("print(\"🐍")) {
+				await editor.edit(editBuilder => {
+					// find the indent of the line
+					const indent = line.firstNonWhitespaceCharacterIndex;
+					// find the position of the first character of the line
+					const p = new vscode.Position(i, indent);
+					editBuilder.insert(p, "# ");
+				});
+			}
+		}
+	})
+	context.subscriptions.push(disposable);
+	disposable = vscode.commands.registerCommand('turbo-python-print.pythonUnCommentAllPrint', async () => {
+		let editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showErrorMessage("No active editor");
+		}
+		let start, end;
+		let selection = editor.selection;
+		if (selection.isEmpty) {
+			start = 0;
+			end = editor.document.lineCount - 1;
+		} else {
+			start = editor.selection.start.line;
+			end = editor.selection.end.line;
+		}
+		for (let i = start; i <= end; i++) {
+			const line = editor.document.lineAt(i);
+			const lineText = line.text.trim();
+			if (lineText.startsWith("# print(\"🐍")) {
+				await editor.edit(editBuilder => {
+					// find the indent of the line
+					const indent = line.firstNonWhitespaceCharacterIndex;
+					// find the position of the first character of the line
+					const p = new vscode.Position(i, indent);
+					// replace the lineText
+					editBuilder.replace(p, lineText.replace("# ", ""));
+				});
+			}
+		}
+	})
+	context.subscriptions.push(disposable);
 }
 
 // this method is called when your extension is deactivated
