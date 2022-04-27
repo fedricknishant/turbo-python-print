@@ -70,13 +70,14 @@ function activate(context) {
 					// get the indentation spaces count of the print statement	
 					// get the heirarchy
 					const heirarchy = utils.getHeirarchy(fullText, lineNumber, document)
+					const { correctedLineNumber, indent } = utils.getLineNumberAndIndentToPrint(fullText, lineNumber, document)
 
 
 					// add spaces for formating	
 					const spaces = ' '.repeat(firstCharPosition);
 					// insert comment in the editor
 					editor.edit(editBuilder => {
-						editBuilder.insert(new vscode.Position(lineNumber, characterEnd), `\n${spaces}print("🐍 File: ${fileName} | Line: ${lineNumber + 2} | ${heirarchy} ~ ${text}",${text})`);
+						editBuilder.insert(new vscode.Position(correctedLineNumber, characterEnd), `\n${spaces}print("🐍 File: ${fileName} | Line: ${lineNumber + 2} | ${heirarchy} ~ ${text}",${text})`);
 					});
 				}
 
