@@ -174,7 +174,9 @@ function activate(context) {
 					const indent = line.firstNonWhitespaceCharacterIndex;
 					// find the position of the first character of the line
 					const p = new vscode.Position(i, indent);
-					// replace the lineText
+					// deleting the line content and inserting changed content
+					editBuilder.delete(new vscode.Range(p, new vscode.Position(i, line.text.length)));
+
 					editBuilder.replace(p, lineText.replace("# ", ""));
 				});
 			}
