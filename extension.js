@@ -60,24 +60,23 @@ function activate(context) {
 					// const lineNumber = document.lineAt(selection.start.line).lineNumber;
 					const lineNumber = selection.active.line;
 
-					// get the character end of the selected text
-					const characterEnd = document.lineAt(selection.end.line).range.end.character;
+
 
 					const fullText = document.lineAt(selection.end.line).text;
-					// get the position of first character of the fullText after spaces
-					const firstCharPosition = fullText.search(/\S/);
 
 					// get the indentation spaces count of the print statement	
 					// get the heirarchy
 					const heirarchy = utils.getHeirarchy(fullText, lineNumber, document)
 					const { correctedLineNumber, indent } = utils.getLineNumberAndIndentToPrint(fullText, lineNumber, document)
 
+					// get the character end of the selected text
+					const characterEnd = document.lineAt(correctedLineNumber).range.end.character;
 
 					// add spaces for formating	
-					const spaces = ' '.repeat(firstCharPosition);
+					const spaces = ' '.repeat(indent);
 					// insert comment in the editor
 					editor.edit(editBuilder => {
-						editBuilder.insert(new vscode.Position(correctedLineNumber, characterEnd), `\n${spaces}print("🐍 File: ${fileName} | Line: ${lineNumber + 2} | ${heirarchy} ~ ${text}",${text})`);
+						editBuilder.insert(new vscode.Position(correctedLineNumber, characterEnd), `\n${spaces}print("🐍 File: ${fileName} | Line: ${correctedLineNumber + 2} | ${heirarchy} ~ ${text}",${text})`);
 					});
 				}
 

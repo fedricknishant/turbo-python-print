@@ -41,10 +41,17 @@ const getHeirarchy = (fullText, lineNumber, document) => {
 
 const getLineNumberAndIndentToPrint = (fullText, lineNumber, document) => {
     const firstCharPosition = fullText.search(/\S/);
-    let indent = 0
+    let indent = firstCharPosition
+
+    // if the text ends with ":" then indent is +4
+    let trimedfullText = fullText.trim()
+    if (trimedfullText.endsWith(':')) {
+        indent += 4
+    }
+
+
     if (firstCharPosition === 0) {
-        // DO SOMETHING
-        console.log("INSIDE IF");
+        return { correctedLineNumber: lineNumber, indent: indent }
     } else {
         let tempLineNumber = lineNumber
         let firstCharPosition = fullText.search(/\S/);
@@ -78,7 +85,7 @@ const getLineNumberAndIndentToPrint = (fullText, lineNumber, document) => {
             modifyBracketsStack(trimedText, startingBrackets, bracketsStack, endingBrackets)
         }
 
-        return { correctedLineNumber: tempLineNumber, indent: 0 }
+        return { correctedLineNumber: tempLineNumber, indent: indent }
     }
 }
 
